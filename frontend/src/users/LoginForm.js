@@ -27,13 +27,17 @@ function LoginForm() {
 
         const data = await response.json()
 
-        if (response.status === 200) {
+        if (response.ok) {
             setCurrentUser(data.user)
+            localStorage.setItem('token', data.token)
             history.push(`/`)
         } else {
             setErrorMessage(data.message)
         }
 
+    } catch (error) {
+        console.error("An error occurred:", error);
+        setErrorMessage('An error occurred, please try again!');
     }
 
     return (
