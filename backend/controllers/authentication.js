@@ -19,17 +19,32 @@ router.post('/', async (req, res) => {
     }
 })
 
+___
 router.get('/profile', async (req, res) => {
     try {
-        let user = await User.findOne({
-            where: {
-                userId:                      
-            }
-        })
-        res.json(user)
+        // Split the authorization header
+        const [authenticationMethod, token] = req.headers.authorization.split(' ')
+
+        // Only handle Bearer authorization for now 
+        if (authenticationMethod == 'Bearer') {
+
+            // Decode JWT
+            const result = await jwt.decode(process.env.JWT_SECRET, token)
+
+            // Get logged in user's id from the payload
+            const { id } = result.value
+
+            let user = await User.findOne({
+                where: {
+                    userId: id
+                }
+            })
+            res.json(user)
+        }
     } catch {
         res.json(null)
     }
 })
+
 
 module.exports = router
