@@ -20,6 +20,21 @@ function PlaceDetails() {
 		fetchData()
 	}, [placeId])
 
+	let placeActions = null
+
+if (currentUser?.role === 'admin') {
+    placeActions = (
+        <>
+            <a className="btn btn-warning" onClick={editPlace}>
+                Edit
+            </a>
+            <button type="submit" className="btn btn-danger" onClick={deletePlace}>
+                Delete
+            </button>
+        </>
+    )
+}
+
 	if (place === null) {
 		return <h1>Loading</h1>
 	}
@@ -128,6 +143,7 @@ function PlaceDetails() {
 						Serving {place.cuisines}.
 					</h4>
 					<br />
+					{placeActions}
 					<a className="btn btn-warning" onClick={editPlace}>
 						Edit
 					</a>{` `}
